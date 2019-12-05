@@ -4,7 +4,7 @@ namespace bricksasp\member;
 /**
  * member module definition class
  */
-class Module extends \yii\base\Module
+class Module extends \bricksasp\base\BaseModule
 {
     /**
      * {@inheritdoc}
