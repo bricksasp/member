@@ -2,7 +2,6 @@
 namespace bricksasp\member\models;
 
 use Yii;
-use yii\httpclient\Client;
 use bricksasp\helpers\Tools;
 
 /**
@@ -70,38 +69,4 @@ class UserWx extends \bricksasp\base\BaseActiveRecord
         ];
     }
 
-    public function appletSessionkey($params)
-    {
-        $code = $params['code'];
-        $map['owner_id'] = $params['owner_id'];
-
-        $model = Yii::createObject([
-            'class' => 'bricksasp\\member\\models\\platform\\' . $params['class'],
-            'type' => $params['type'],
-            'data' => $params,
-        ]);
-        return $model->getData();
-    }
-
-    public function appletLogin()
-    {
-        
-        if(isset($res['unionid']) && $res['unionid']){
-            $map['unionid'] = $res['unionid'];
-        }else{
-            $map['openid'] = $res['openid'];
-        }
-
-        $user = self::find()->where($map)->one();
-        if ($user) {
-            $this->load($res);
-            $this->save();
-        }else{
-            $this->load($map);
-            print_r($map);
-            if (!$this->save()) {
-                Tools::exceptionBreak('980002');
-            }
-        }
-    }
 }
