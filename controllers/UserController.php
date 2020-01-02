@@ -36,7 +36,7 @@ class UserController extends \bricksasp\base\BaseController
 	 *   summary="小程序sessionkey",
 	 *   tags={"member模块"},
 	 *   @OA\Parameter(
-	 *     description="开启平台功能后，访问商户对应的数据标识，未开启忽略此参数",
+	 *     description="登录凭证",
 	 *     name="X-Token",
 	 *     in="header",
 	 *     @OA\Schema(
@@ -113,7 +113,7 @@ class UserController extends \bricksasp\base\BaseController
 	 *   summary="三方登录",
 	 *   tags={"member模块"},
 	 *   @OA\Parameter(
-	 *     description="开启平台功能后，访问商户对应的数据标识，未开启忽略此参数",
+	 *     description="登录凭证",
 	 *     name="X-Token",
 	 *     in="header",
 	 *     @OA\Schema(
@@ -202,7 +202,7 @@ class UserController extends \bricksasp\base\BaseController
 	 *   summary="发送短信验证码",
 	 *   tags={"member模块"},
 	 *   @OA\Parameter(
-	 *     description="开启平台功能后，访问商户对应的数据标识，未开启忽略此参数",
+	 *     description="登录凭证",
 	 *     name="X-Token",
 	 *     in="header",
 	 *     @OA\Schema(
@@ -250,7 +250,7 @@ class UserController extends \bricksasp\base\BaseController
 	 *   summary="手机注册绑定三方账户",
 	 *   tags={"member模块"},
 	 *   @OA\Parameter(
-	 *     description="开启平台功能后，访问商户对应的数据标识，未开启忽略此参数",
+	 *     description="登录凭证",
 	 *     name="X-Token",
 	 *     in="header",
 	 *     @OA\Schema(
