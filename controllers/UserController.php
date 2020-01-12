@@ -7,6 +7,12 @@ use bricksasp\member\models\ThreePartyAccount;
 use bricksasp\member\models\FormValidate;
 use bricksasp\member\models\Sms;
 use bricksasp\member\models\UserWx;
+use bricksasp\member\models\UserIntegral;
+use bricksasp\member\models\UserFund;
+use bricksasp\helpers\Tools;
+use bricksasp\rbac\models\UserInfo;
+use bricksasp\promotion\models\PromotionCoupon;
+use bricksasp\order\models\Order;
 
 class UserController extends \bricksasp\base\BaseController
 {
@@ -15,7 +21,9 @@ class UserController extends \bricksasp\base\BaseController
      * @return array
      */
     public function allowAction() {
-        return [];
+        return [
+        	'info'
+        ];
     }
 
     /**
@@ -315,5 +323,57 @@ class UserController extends \bricksasp\base\BaseController
 		}
 
 		return $this->fail($validator->errors);
+    }
+
+	/**
+	 * @OA\Get(path="/member/user/info",
+	 *   summary="用户信息",
+	 *   tags={"member模块"},
+	 *   @OA\Parameter(
+	 *     description="登录凭证",
+	 *     name="X-Token",
+	 *     in="header",
+	 *     @OA\Schema(
+	 *       type="string"
+	 *     )
+	 *   ),
+	 *   @OA\Response(
+	 *     response=200,
+	 *     description="用户信息结构",
+	 *     @OA\MediaType(
+	 *       mediaType="application/json",
+	 *       @OA\Schema(ref="#/components/schemas/uInfo"),
+	 *     ),
+	 *   ),
+	 * )
+	 *
+	 * @OA\Schema(
+	 *   schema="uInfo",
+	 *   description="数据结构",
+	 *   allOf={
+	 *     @OA\Schema(
+	 *       @OA\Property(property="nickname", type="string", description="昵称"),
+	 *       @OA\Property(property="avatar", type="string", description="头像地址"),
+	 *       @OA\Property(property="coupon", type="string", description="优惠券数量"),
+	 *       @OA\Property(property="amount", type="string", description="余额"),
+	 *       @OA\Property(property="longterm", type="string", description="长期订单"),
+	 *     )
+	 *   }
+	 * )
+	 */
+    public function actionInfo()
+    {
+    	$uinfo = $winfo = $uFund = [];
+    	if (Tools::is_wechat()) {
+    		$winfo = UserWx::find($this->ownerCondition())->select(['nickname', 'avatar'])->asArray()->one();
+    	}
+    	$uinfo = UserInfo::find($this->ownerCondition())->select(['nickname', 'avatar'])->asArray()->one();
+    	$uFund = UserFund::find($this->ownerCondition())->asArray()->one();
+    	$uIntegral = UserIntegral::find($this->ownerCondition())->asArray()->one();
+    	$uinfo = array_merge($uFund, $uIntegral, $uinfo, $winfo);
+    	$coupon = PromotionCoupon::find($this->ownerCondition())->where(['status' => 1])->count();
+    	$uinfo['coupon'] = $coupon;
+    	$uinfo['longterm'] = Order::find($this->ownerCondition())->where(['status' => Order::ORDER_TYPE_LONGTERM])->count();;
+    	return $this->success($uinfo);
     }
 }
