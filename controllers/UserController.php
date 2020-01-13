@@ -363,7 +363,7 @@ class UserController extends \bricksasp\base\BaseController
 	 */
     public function actionInfo()
     {
-    	$uinfo = $winfo = $uFund = [];
+    	$uinfo = $winfo = $uFund = $uIntegral = [];
     	if (Tools::is_wechat()) {
     		$winfo = UserWx::find($this->ownerCondition())->select(['nickname', 'avatar'])->asArray()->one();
     	}
