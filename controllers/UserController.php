@@ -357,6 +357,8 @@ class UserController extends \bricksasp\base\BaseController
 	 *       @OA\Property(property="coupon", type="string", description="优惠券数量"),
 	 *       @OA\Property(property="amount", type="string", description="余额"),
 	 *       @OA\Property(property="longterm", type="string", description="长期订单"),
+	 *       @OA\Property(property="vip", type="integer", description="vip等级"),
+	 *       @OA\Property(property="vip_time", type="integer", description="vip到期时间"),
 	 *     )
 	 *   }
 	 * )
@@ -367,13 +369,13 @@ class UserController extends \bricksasp\base\BaseController
     	if (Tools::is_wechat()) {
     		$winfo = UserWx::find($this->ownerCondition())->select(['nickname', 'avatar'])->asArray()->one();
     	}
-    	$uinfo = UserInfo::find($this->ownerCondition())->select(['nickname', 'avatar'])->asArray()->one();
+    	$uinfo = UserInfo::find($this->ownerCondition())->select(['nickname', 'avatar', 'vip', 'vip_time'])->asArray()->one();
     	$uFund = UserFund::find($this->ownerCondition())->asArray()->one();
     	$uIntegral = UserIntegral::find($this->ownerCondition())->asArray()->one();
     	$uinfo = array_merge($uFund, $uIntegral, $uinfo, $winfo);
     	$coupon = PromotionCoupon::find($this->ownerCondition())->where(['status' => 1])->count();
     	$uinfo['coupon'] = $coupon;
-    	$uinfo['longterm'] = Order::find($this->ownerCondition())->where(['status' => Order::ORDER_TYPE_LONGTERM])->count();;
+    	$uinfo['longterm'] = Order::find($this->ownerCondition())->where(['status' => Order::ORDER_TYPE_LONGTERM])->count();
     	return $this->success($uinfo);
     }
 }
