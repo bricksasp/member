@@ -10,6 +10,8 @@ use yii\httpclient\Client;
 use bricksasp\helpers\Tools;
 use bricksasp\rbac\models\User;
 use bricksasp\rbac\models\UserInfo;
+use bricksasp\member\models\UserFund;
+use bricksasp\member\models\UserIntegral;
 
 
 class Wechat extends BaseObject
@@ -111,7 +113,14 @@ class Wechat extends BaseObject
             }
             $userInfo = new UserInfo();
             $userInfo->load(['user_id'=>$user->id, 'owner_id'=>$this->data['owner_id']]);
-            if (!$userInfo->save()) {
+
+            $userFund = new UserFund();
+            $userFund->load(['user_id'=>$user->id, 'owner_id'=>$this->data['owner_id']]);
+            
+            $userIntegral = new UserIntegral();
+            $userIntegral->load(['user_id'=>$user->id, 'owner_id'=>$this->data['owner_id']]);
+            
+            if (!$userInfo->save() || !$userFund->save() || !$userIntegral->save()) {
                 $transaction->rollBack();
                 Tools::exceptionBreak('2');
             }
