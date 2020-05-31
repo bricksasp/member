@@ -1,0 +1,24 @@
+{
+    "name": "bricksasp/member",
+    "description": "bricksasp member",
+    "keywords": ["yii2", "member"],
+    "type": "yii2-extension",
+    "support": {
+        "issues": "https://github.com/bricksasp/member/issues",
+        "source": "https://github.com/bricksasp/member"
+    },
+    "authors": [
+        {
+            "name": "bricksasp",
+            "email": "649909457@qq.com"
+        }
+    ],
+    "require": {
+        "bricksasp/base": "~1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "bricksasp\\member\\": ""
+        }
+    }
+}
